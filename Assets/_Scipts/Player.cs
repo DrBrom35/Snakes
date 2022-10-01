@@ -36,8 +36,8 @@ public class Player : MonoBehaviour
 
         Vector3 pos = transform.position;
         pos.x=mousePos3d.x;
-        pos.y=mousePos3d.y;
-        transform.position=Vector3.MoveTowards(transform.position,pos,Speed);
+        //pos.y=mousePos3d.y;
+        transform.position=Vector3.MoveTowards(transform.position,pos,Speed*Mathf.Abs(transform.position.x - pos.x)*Time.deltaTime);
             
        }
         
@@ -49,17 +49,12 @@ public class Player : MonoBehaviour
 
         if(post.x<-Wight+radius) { post.x = -Wight+radius; }
 
-        if(post.y> Height - radius) { post.y = Height-radius; }
+       /* if(post.y> Height - radius) { post.y = Height-radius; }
 
-        if(post.y< -Height+radius) { post.y = -Height+radius; }
+        if(post.y< -Height+radius) { post.y = -Height+radius; }*/
 
         transform.position = post;
     }
-    private void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-        Vector3 gran=new Vector3(Wight*2, Height*2,0.1f);
-        Gizmos.DrawWireCube(Vector3.zero, gran);
-    }
+    
 }
 
