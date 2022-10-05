@@ -32,17 +32,18 @@ public class Block : MonoBehaviour
         if (other.TryGetComponent(out SnakeGenerator SnakeGenerator))
         {
             PointsBlock--;
-            SnakeGenerator.PointsSnake--;
             SnakeGenerator.Breaker();
-            
+            SnakeGenerator.PointsSnake--;
+
         }
 
-        
-            
-    }
+     
+
+
+}
     void RipBlock()
     {
-        if(PointsBlock == 0)
+        if(PointsBlock <= 0)
         {
             Destroy(gameObject);
         }

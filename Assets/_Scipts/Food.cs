@@ -15,7 +15,7 @@ public class Food : MonoBehaviour
         Text.text = FoodPoints.ToString();
         for (int i = 0; i < FoodPoints; i++)
         {
-            var chain=Instantiate(Body);
+            var chain=Instantiate(Body,new Vector3(0,0,i*-1),Quaternion.identity);
             _food.Add(chain.transform);   
         }  
     }
@@ -26,6 +26,7 @@ public class Food : MonoBehaviour
         if(other.TryGetComponent(out SnakeGenerator SnakeGenerator))
         {
             SnakeGenerator._bodies.AddRange(_food);
+            SnakeGenerator.PointsSnake = SnakeGenerator.PointsSnake + _food.Count;
             Destroy(gameObject);
         }
 

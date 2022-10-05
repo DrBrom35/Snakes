@@ -11,17 +11,18 @@ public class SnakeGenerator : MonoBehaviour
     private Transform _transform;
     public float SpeedBody;
     public float PointsSnake;
+    public float PointsText;
 
 
     private void Awake()
     {
         _transform = GetComponent<Transform>();
-       
+        PointsSnake=_bodies.Count+1;
     }
    
     private void Update()
     {
-        PointsSnake = _bodies.Count + 1;
+        PointsText = PointsSnake;
         MoveBody(_transform.position);
         RipSnake();
     }
@@ -34,7 +35,7 @@ public class SnakeGenerator : MonoBehaviour
             float squdDis = DistBody * DistBody;
             int namberChain = _bodies.IndexOf(chain);
             Vector3 xvector = Vector3.MoveTowards(chain.position, _transform.position, SpeedBody);
-            Vector3 previosePosition = new Vector3(xvector.x, _transform.position.y, -(_transform.position.z + ((1 + namberChain) * DistBody)));
+            Vector3 previosePosition = new Vector3(xvector.x, _transform.position.y, (_transform.position.z - ((1 + namberChain) * DistBody)));
 
             if ((chain.position - _transform.position).sqrMagnitude > squdDis)
             {
@@ -51,16 +52,7 @@ public class SnakeGenerator : MonoBehaviour
     }
 
 
-   public void Eater()
-    {
-       
-        {
-            var chain = Instantiate(BodiesPart);
-            _bodies.Add(chain.transform);
-            PointsSnake++;
-        }
-
-    }
+ 
 
     public void Breaker()
     {
@@ -74,10 +66,11 @@ public class SnakeGenerator : MonoBehaviour
     }
    public void RipSnake()
     {
-        if(PointsSnake == -1f)
+        if(PointsSnake == -1f) 
         {
-            Destroy(gameObject);
+            this.gameObject.SetActive(false);
         }
+        return;
     }
 
 }

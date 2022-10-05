@@ -11,6 +11,6 @@ public class HeadText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Text.text=SnakeGenerator.PointsSnake.ToString();
+        Text.text=SnakeGenerator.PointsText.ToString();
     }
 }
