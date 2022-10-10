@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-
+    public bool MinBlock;
     private Rigidbody rb;
     private Material _material;
+    [Min(0)]
     public int PointsBlock;
     public float Speed;
+    public SnakeGenerator SnakeGenerator;
+    public Transform Level { get; private set; }
+    public int WaltPoint;
 
     private void Awake()
     {
@@ -16,7 +20,22 @@ public class Block : MonoBehaviour
 
         _material = GetComponent<Renderer>().material;
 
+        LevelGenerator levelGenerator = GetComponentInParent<LevelGenerator>();
+        WaltPoint = levelGenerator.MinBlockPoint;
     }
+    void Start(){
+            if (MinBlock == true)
+            {
+            PointsBlock =Random.Range(1, WaltPoint-1);
+            
+            }
+            else
+            {
+                PointsBlock = Random.Range(1, 50);
+            }
+     }
+    
+
 
     private void Update()
     {
@@ -34,6 +53,7 @@ public class Block : MonoBehaviour
             PointsBlock--;
             SnakeGenerator.Breaker();
             SnakeGenerator.PointsSnake--;
+            SnakeGenerator.Score++;
 
         }
 
@@ -46,6 +66,7 @@ public class Block : MonoBehaviour
         if(PointsBlock <= 0)
         {
             Destroy(gameObject);
+
         }
     }
 }

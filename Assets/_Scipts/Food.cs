@@ -5,6 +5,7 @@ using TMPro;
 
 public class Food : MonoBehaviour
 {
+    [Min(0)]
     public int FoodPoints;
     public TMP_Text Text;
     public GameObject Body;
@@ -12,6 +13,7 @@ public class Food : MonoBehaviour
 
     private void Awake()
     {
+        FoodPoints = Random.Range(1, 5);
         Text.text = FoodPoints.ToString();
         for (int i = 0; i < FoodPoints; i++)
         {
@@ -29,6 +31,7 @@ public class Food : MonoBehaviour
             SnakeGenerator.PointsSnake = SnakeGenerator.PointsSnake + _food.Count;
             Destroy(gameObject);
         }
+        return;
 
     }
 }

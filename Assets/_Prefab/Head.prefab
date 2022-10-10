@@ -327,6 +327,9 @@ MonoBehaviour:
   - {fileID: 0}
   SpeedBody: 2
   PointsSnake: 0
+  PointsText: 0
+  LevelGenerator: {fileID: 0}
+  Game: {fileID: 0}
 --- !u!114 &-1344310357313956868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,3 +357,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 7
+  SpeedHorizontale: 0
+  rb: {fileID: 0}

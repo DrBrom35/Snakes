@@ -12,8 +12,6 @@ public class Head : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        
-
     }
  
     void FixedUpdate()
@@ -35,7 +33,7 @@ public class Head : MonoBehaviour
 
         Vector3 pos = transform.position;
         pos.x=mousePos3d.x;
-        rb.AddForce(new Vector3(pos.x*SpeedHorizontale,0,0),ForceMode.Acceleration);
+        rb.AddForce(new Vector3(pos.x*SpeedHorizontale,0,0));
             
        }
         

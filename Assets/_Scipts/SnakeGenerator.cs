@@ -8,69 +8,146 @@ public class SnakeGenerator : MonoBehaviour
     public GameObject BodiesPart;
     public float DistBody;
     public List<Transform> _bodies;
-    private Transform _transform;
     public float SpeedBody;
-    public float PointsSnake;
+    public int PointsSnake;
+    public int Score;
     public float PointsText;
+    public LevelGenerator LevelGenerator;
+    public Game Game;
+    private const string SnakeIndexKey = "SnakeIndex";
+    private const string ScoreIndexKey = "ScoreIndex";
+    private const string BestScoreIndexKey = "BestScoreIndex";
 
 
     private void Awake()
     {
-        _transform = GetComponent<Transform>();
-        PointsSnake=_bodies.Count+1;
-    }
-   
-    private void Update()
-    {
-        PointsText = PointsSnake;
-        MoveBody(_transform.position);
-        RipSnake();
-    }
+        Score = ScoreIndex;
 
-    private void MoveBody(Vector3 newPosition)
-    {
-
-        foreach (var chain in _bodies)
+        
+        if (SnakeIndex <= 0)
         {
-            float squdDis = DistBody * DistBody;
-            int namberChain = _bodies.IndexOf(chain);
-            Vector3 xvector = Vector3.MoveTowards(chain.position, _transform.position, SpeedBody);
-            Vector3 previosePosition = new Vector3(xvector.x, _transform.position.y, (_transform.position.z - ((1 + namberChain) * DistBody)));
-
-            if ((chain.position - _transform.position).sqrMagnitude > squdDis)
+            PointsSnake = 4;
+            for (int i = 0; i < 3; i++)
             {
-                var temp = chain.position;
-                chain.position = previosePosition;
-                previosePosition = temp;
-            }
-            else
-            {
-                break;
+                var chain = Instantiate(BodiesPart, new Vector3(0, 1, i * -1), Quaternion.identity);
+               
+                _bodies.Add(chain.transform);
             }
         }
-        _transform.position = newPosition;
+        else
+        {
+            PointsSnake = SnakeIndex;
+            for (int i = 0; i < SnakeIndex-1; i++)
+            {
+                var chain = Instantiate(BodiesPart, new Vector3(0, 1, i * -1), Quaternion.identity);
+                
+                _bodies.Add(chain.transform);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        RipSnake();
+        PointsText = PointsSnake;
+
+        
+    }
+
+    void FixedUpdate()
+    {
+        MoveBody();
+    }
+
+    private void MoveBody()
+    {
+        
+        Vector3 previosePosition=transform.position;
+        foreach (var chain in _bodies)
+        {
+
+
+                Vector3 currectPos=chain.position;
+                chain.position=Vector3.MoveTowards(previosePosition,chain.position,SpeedBody+Time.deltaTime);
+                previosePosition = currectPos;
+                
+           
+        }
+        
     }
 
 
- 
+
 
     public void Breaker()
     {
-            if (_bodies.Count == 0){ return;}
+        if (_bodies.Count == 0) { return; }
 
-            Destroy(_bodies[_bodies.Count-1].gameObject );
-            _bodies.RemoveAt(_bodies.Count - 1);
-           
-        
-        
+        Destroy(_bodies[_bodies.Count - 1].gameObject);
+        _bodies.RemoveAt(_bodies.Count - 1);
+
+
+
     }
-   public void RipSnake()
+    public void RipSnake()
     {
-        if(PointsSnake == -1f) 
+        if (PointsSnake <= -1f)
         {
+
             this.gameObject.SetActive(false);
+            Game.OnSnakeDied();
+            SnakeIndex = 0;
+            ScoreIndex = 0;
+            if (Score > BestScoreIndex)
+            {
+                BestScoreIndex = Score;
+            }
+
         }
         return;
     }
 
+    public void Level()
+    {
+        LevelGenerator.CreateWalt();
+    }
+
+    public int SnakeIndex
+    {
+        get => PlayerPrefs.GetInt(SnakeIndexKey, 0);
+        private set
+        {
+            PlayerPrefs.SetInt(SnakeIndexKey, value);
+            PlayerPrefs.Save();
+        }
+    }
+    public int ScoreIndex
+    {
+        get => PlayerPrefs.GetInt(ScoreIndexKey, 0);
+        private set
+        {
+            PlayerPrefs.SetInt(ScoreIndexKey, value);
+            PlayerPrefs.Save();
+        }
+    }
+    public int BestScoreIndex
+    {
+        get => PlayerPrefs.GetInt(BestScoreIndexKey, 0);
+        private set
+        {
+            PlayerPrefs.SetInt(BestScoreIndexKey, value);
+            PlayerPrefs.Save();
+        }
+    }
+
+
+    public void Snakesave()
+    {
+        SnakeIndex = PointsSnake;
+        ScoreIndex = Score;
+        if (Score > BestScoreIndex)
+        {
+            BestScoreIndex = Score;
+        }
+    }
 }
